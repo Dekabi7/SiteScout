@@ -1,0 +1,51 @@
+{
+  "name": "sitescout-backend",
+  "version": "1.0.0",
+  "description": "SiteScout SaaS Backend API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration",
+    "test:coverage": "jest --coverage",
+    "test:auth": "node test-auth.js",
+    "test:db": "node test-db.js",
+    "migrate": "node database/migrate.js",
+    "db:migrate": "node database/migrate.js",
+    "db:seed": "node database/seeds/run-seeds.js",
+    "db:reset": "node database/reset.js",
+    "setup:stripe": "node setup-stripe.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.6.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "firebase-admin": "^13.5.0",
+    "googleapis": "^128.0.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.3",
+    "stripe": "^18.5.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-mock-extended": "^3.0.5",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  },
+  "keywords": [
+    "saas",
+    "lead-generation",
+    "business-discovery",
+    "api"
+  ],
+  "author": "SiteScout Team",
+  "license": "MIT"
+}

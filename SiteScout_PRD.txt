@@ -1,0 +1,153 @@
+Product Requirements Document (PRD)
+Product Name:  NoSiteFinder – SaaS Lead‑Gen Tool for Businesses Without Websites\ Version:  0.9 (Draft)\
+Author:  ChatGPT (Assistant)\ Date:  July 7, 2025
+1  Overview
+1.1  Problem Statement
+More than 25 % of small local businesses in the U.S. still operate without a dedicated website, missing out
+on search visibility, credibility, and online revenue. Web‑design agencies waste hours manually prospecting
+these businesses.
+1.2  Solution Statement
+NoSiteFinder automatically surfaces businesses that lack a website, enriches each lead with contact data,
+and equips agencies with AI‑generated marketing copy and one‑click CSV export—shrinking prospecting
+time from hours to minutes.
+1.3  Strategic Fit
+Vision:  Empower every local business to get online.
+Mission:  Become the go‑to lead‑gen platform for digital marketers and web studios worldwide.
+Competitive Advantage:  Niche focus, real‑time data, built‑in AI copy, friction‑less UI.
+2  Goals & Success Metrics
+Goal KPI Target (90 days post‑launch)
+Speed up lead discovery Avg. time to first 50 leads < 5 min
+Drive user activation % of new sign‑ups exporting CSV ≥ 60 %
+Generate revenue MRR \$25k
+Accuracy % of leads truly without websites ≥ 95 %• 
+• 
+• 
+1
+3  User Personas
+Persona Role & Needs Pain Points Key Value
+Agency Owner Alex (37)Runs 10‑person web
+agency. Needs
+predictable lead flow.Manual Google/Yelp
+scraping is slow.Bulk high‑intent
+leads + CSV export.
+Digital Marketer Dana
+(29)Solo freelancer; sells
+Squarespace builds.Struggles to craft
+personalized cold
+emails.AI‑generated
+taglines & outreach
+copy.
+BizDev Ben (42)Inside‑sales rep at SaaS
+company.CRM import /
+enrichment gaps.Direct CRM push &
+dedupe.
+Productized‑Service
+Founder Freya (24)Automates landing‑page
+builds.Lacks technical API
+to power app.Webhooks + REST
+API for leads.
+4  Key Use Cases
+Quick Lead Harvest  – Alex enters "Denver , CO → Restaurants" and exports 300 website‑less
+businesses to CSV in < 3 minutes.
+Personalized Outreach  – Dana selects 50 leads, clicks “Generate Copy,” and gets tagline + email
+draft for each.
+CRM Sync  – Ben authenticates HubSpot; new leads auto‑push nightly.
+5  Functional Requirements
+5.1  Business Discovery & Filtering
+FR‑1 : Accept location (auto‑complete) & business category.
+FR‑2 : Fetch businesses via Google Places API (and fallback providers).
+FR‑3 : Detect existing website via website  field, MX records, and SERP check. Exclude matches.
+5.2  Lead Table UI
+FR‑4 : Infinite scroll + sticky column headers.
+FR‑5 : Columns: Name, Category, Address, Phone, Website (blank), Rating, Reviews, Last Updated.
+FR‑6 : Multi‑select rows, bulk actions (Export, Generate Copy).
+5.3  AI Tagline & Email Generator
+FR‑7 : For ≤ 200 selected rows, call LLM (Gemini 2.0 via Vertex AI) with templated prompt.
+FR‑8 : Display taglines inline; allow copy‑to‑clipboard and .csv export.1. 
+2. 
+3. 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+5.4  CSV Export & Integrations
+FR‑9 : One‑click CSV download obeying column visibility.
+FR‑10 : OAuth 2.0 connectors for HubSpot & Pipedrive.
+FR‑11 : Zapier webhook trigger .
+5.5  User & Billing
+FR‑12 : Email/password + Google OAuth auth.
+FR‑13 : Tiered plans (Free, Pro, Agency) via Stripe Billing.
+FR‑14 : Rate limits per plan: daily lead exports 50/500/5 000.
+6  Non‑Functional Requirements
+Category Requirement
+Performance Search results in ≤ 4 s for 1k businesses.
+Scalability Horizontally scalable worker pool for website detection.
+Security SOC 2 Type II compliant; TLS 1.3; GDPR & CCPA ready.
+Availability 99.9 % uptime SLO.
+Data Privacy PII encrypted at rest (AES‑256) and in transit.
+Accessibility WCAG 2.2 AA compliance.
+7  Data & APIs
+Primary Sources:  Google Places API, Yelp Fusion (backup), OpenStreetMap for geocoding.
+Enrichment:  Clearbit Phone & domain status check.
+Database:  PostgreSQL (RDS) + PostGIS; Redis cache for recent searches.
+LLM:  Google Gemini 2.0 via Vertex AI.
+8  Technical Architecture
+[Client]  ⇄  [Next.js Edge + tRPC]  ⇄  [Graph‑QL BFF]  ⇄  [Microservices]
+                              ↳ biz‑search (Node.js)
+                              ↳ site‑detect (Python FastAPI, Celery workers)
+                              ↳ ai‑copy (Go)
+                              ↳ billing (Stripe webhooks)• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
+Infra on GCP (Cloud Run + Pub/Sub + Cloud SQL).
+9  UX / UI Principles
+Single‑page workflow  – Search → Filter → Export in one viewport.
+Simplicity first  – Default to sensible filters; hide advanced options.
+Explainability  – Show “Why flagged?” tooltip when a business is marked website‑less.
+10  Roadmap & Milestones
+Phase Timeline Scope
+Phase 0 – Discovery W‑1 ✓ Interviews, persona validation.
+Phase 1 – MLP W‑2 → W‑6 Search, website detection, lead table, CSV export.
+Phase 2 – AI Copy & Auth W‑7 → W‑9 Tagline generator , user accounts, Stripe billing.
+Phase 3 – Integrations W‑10 → W‑12 HubSpot, Zapier , webhooks.
+Phase 4 – Scale & Polish W‑13 → W‑16 Perf tuning, accessibility audit, SOC 2 kickoff.
+11  Risks & Mitigations
+Risk Impact Likelihood Mitigation
+Google API quota limits High MediumCache results; pre‑warm; request higher
+quota.
+False positives (website
+exists)Medium Medium Multi‑layer detection incl. HTTP HEAD & DNS.
+LLM hallucination in copy Medium LowGuardrail prompts; review word count & style
+rules.
+Data‑privacy compliance High Low Hire DPO; conduct DPIA.
+12  Open Questions
+Do we include email address scraping, or rely on external enrichment?
+Should Free plan allow AI copy generation at all?
+What geographic markets first: US‑only or include Canada/UK?1. 
+2. 
+3. 
+1. 
+2. 
+3. 
+4
+13  Appendix
+Competitive landscape snapshot (e.g., Webspotter , BrightLocal).
+API cost estimates sheet.
+Glossary of terms.
+End of Document• 
+• 
+• 
+5
